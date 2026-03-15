@@ -14,6 +14,8 @@ import storage.UserDAO;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    private static final int SESSION_TIMEOUT_SECONDS = 60 * 60 * 24 * 7; // 7日
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -54,7 +56,13 @@ public class LoginServlet extends HttpServlet {
                 return;
             }
 
-            HttpSession session = req.getSession();
+            HttpSession oldSession = req.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
+            }
+
+            HttpSession session = req.getSession(true);
+            session.setMaxInactiveInterval(SESSION_TIMEOUT_SECONDS);
             session.setAttribute("loginUser", loginUser);
 
             resp.sendRedirect(req.getContextPath() + "/");
