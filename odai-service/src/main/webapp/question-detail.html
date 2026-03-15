@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>好きなゲームは？ | 合法的留年チワワ</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header small">
+    <h1>好きなゲームは？</h1>
+</header>
+
+<main class="page-wrap">
+
+    <section class="detail-topbar">
+        <div class="tab-area">
+            <a href="/odai-service/question/1" class="tab-button active">回答一覧</a>
+            <a href="/odai-service/question/1/favorites" class="tab-button">お気に入り</a>
+        </div>
+
+        <div class="local-search-area">
+            <form action="/odai-service/question/1/search" method="get" class="icon-search-form">
+                <input type="text" name="keyword" placeholder="このお題内を検索">
+                <button type="submit" class="icon-button">🔍</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="answer-list-card">
+        <div class="answer-card">
+            <div class="answer-actions">
+                <button class="favorite-button">☆ お気に入り</button>
+            </div>
+            <p>サイバーパンクです。世界観が好き。</p>
+        </div>
+
+        <div class="answer-card">
+            <div class="answer-actions">
+                <button class="favorite-button active">★ お気に入り済み</button>
+            </div>
+            <p>モンハン。ずっと遊べる。</p>
+        </div>
+
+        <div class="answer-card">
+            <div class="answer-actions">
+                <button class="favorite-button">☆ お気に入り</button>
+            </div>
+            <p>FF7リメイクが良かった。</p>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>

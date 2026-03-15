@@ -1,0 +1,64 @@
+<div class="app-header">
+    <div class="app-header-inner">
+
+        <a href="${pageContext.request.contextPath}/" class="app-logo">
+            &#21512;&#27861;&#30340;&#30041;&#24180;&#12481;&#12527;&#12527;
+        </a>
+
+        <button class="menu-toggle" type="button" onclick="toggleMenu()" aria-label="menu">
+            &#9776;
+        </button>
+
+        <nav id="globalMenu" class="global-menu">
+            <a href="${pageContext.request.contextPath}/create">
+                &#12362;&#38988;&#20316;&#25104;
+            </a>
+
+            <a href="${pageContext.request.contextPath}/questions">
+                &#22238;&#31572;&#19968;&#35239;
+            </a>
+
+            <a href="${pageContext.request.contextPath}/ranking">
+                &#38918;&#20301;&#34920;
+            </a>
+
+            <%
+                if (session.getAttribute("loginUser") != null) {
+            %>
+                <a href="${pageContext.request.contextPath}/account">
+                    Discord&#36890;&#30693;&#35373;&#23450;
+                </a>
+                <a href="${pageContext.request.contextPath}/logout">
+                    &#12525;&#12464;&#12450;&#12454;&#12488;
+                </a>
+            <%
+                } else {
+            %>
+                <a href="${pageContext.request.contextPath}/login">
+                    &#12525;&#12464;&#12452;&#12531;
+                </a>
+                <a href="${pageContext.request.contextPath}/register">
+                    &#26032;&#35215;&#30331;&#37682;
+                </a>
+            <%
+                }
+            %>
+        </nav>
+
+    </div>
+</div>
+
+<script src="${pageContext.request.contextPath}/js/answer-image.js"></script>
+
+<script>
+function toggleMenu() {
+    var menu = document.getElementById("globalMenu");
+    if (menu) {
+        if (menu.classList.contains("open")) {
+            menu.classList.remove("open");
+        } else {
+            menu.classList.add("open");
+        }
+    }
+}
+</script>
