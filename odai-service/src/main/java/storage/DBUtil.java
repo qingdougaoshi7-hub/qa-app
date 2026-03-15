@@ -26,12 +26,7 @@ public class DBUtil {
             return envUrl;
         }
 
-        String render = System.getenv("RENDER");
-        if (render != null && !render.isBlank()) {
-            return "jdbc:h2:file:/tmp/odai_service_db3;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE";
-        }
-
-        return "jdbc:h2:~/odai_service_db3;AUTO_SERVER=TRUE";
+        return "jdbc:h2:file:/tmp/odai_service_db3;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE";
     }
 
     public static Connection getConnection() throws SQLException {
