@@ -15,7 +15,8 @@ public class DBInit {
                     username VARCHAR(100) NOT NULL UNIQUE,
                     password_hash VARCHAR(255) NOT NULL,
                     discord_webhook_url VARCHAR(1000),
-                    discord_user_id VARCHAR(50)
+                    discord_user_id VARCHAR(50),
+                    reset_keyword_hash VARCHAR(255)
                 )
             """);
 
@@ -47,6 +48,8 @@ public class DBInit {
                     "ALTER TABLE users ADD COLUMN discord_webhook_url VARCHAR(1000)");
             addColumnIfNotExists(st,
                     "ALTER TABLE users ADD COLUMN discord_user_id VARCHAR(50)");
+            addColumnIfNotExists(st,
+                    "ALTER TABLE users ADD COLUMN reset_keyword_hash VARCHAR(255)");
 
         } catch (Exception e) {
             e.printStackTrace();
