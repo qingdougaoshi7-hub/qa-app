@@ -13,11 +13,11 @@
             "border:none;" +
             "background:#fff;" +
             "color:#222;" +
-            "padding:8px 14px;" +
+            "padding:10px 16px;" +
             "border-radius:999px;" +
             "cursor:pointer;" +
             "font-weight:bold;" +
-            "font-size:14px;" +
+            "font-size:15px;" +
             "line-height:1.2;" +
             "box-shadow:0 2px 8px rgba(0,0,0,0.10);" +
             "transition:transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;" +
@@ -46,19 +46,19 @@
             "align-items:center;" +
             "justify-content:center;" +
             "z-index:3000;" +
-            "padding:20px;" +
+            "padding:16px;" +
             "}" +
             ".ai-modal.open{" +
             "display:flex;" +
             "}" +
             ".ai-modal-panel{" +
-            "width:92vw;" +
-            "max-width:620px;" +
+            "width:94vw;" +
+            "max-width:560px;" +
             "max-height:90vh;" +
             "overflow:auto;" +
             "background:#fff8eb;" +
             "border-radius:24px;" +
-            "padding:18px;" +
+            "padding:16px;" +
             "box-shadow:0 18px 50px rgba(0,0,0,0.35);" +
             "}" +
             ".ai-modal-title{" +
@@ -371,13 +371,13 @@
         var height;
         var width;
 
-        ctx.font = "bold 28px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        paddingX = 22;
-        height = 54;
+        ctx.font = "bold 24px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        paddingX = 20;
+        height = 50;
         width = Math.ceil(ctx.measureText(text).width) + paddingX * 2;
 
         ctx.fillStyle = badgeColor(text);
-        roundRect(ctx, x, y, width, height, 27);
+        roundRect(ctx, x, y, width, height, 25);
         ctx.fill();
 
         ctx.fillStyle = "#ffffff";
@@ -398,22 +398,22 @@
             return y;
         }
 
-        ctx.font = "bold 28px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 24px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
 
         for (i = 0; i < badges.length; i++) {
-            widths.push(Math.ceil(ctx.measureText(badges[i]).width) + 44);
+            widths.push(Math.ceil(ctx.measureText(badges[i]).width) + 40);
             totalWidth += widths[i];
         }
 
-        totalWidth += (badges.length - 1) * 14;
+        totalWidth += (badges.length - 1) * 12;
         x = centerX - totalWidth / 2;
 
         for (i = 0; i < badges.length; i++) {
             drawBadge(ctx, badges[i], x, y);
-            x += widths[i] + 14;
+            x += widths[i] + 12;
         }
 
-        return y + 74;
+        return y + 68;
     }
 
     function drawLargeRank(ctx, rankText, centerX, y) {
@@ -432,19 +432,19 @@
 
         theme = rankTheme(rankText);
 
-        ribbonW = 360;
-        ribbonH = 28;
+        ribbonW = 300;
+        ribbonH = 24;
         ribbonX = centerX - ribbonW / 2;
-        ribbonY = y + 42;
+        ribbonY = y + 34;
 
         ctx.fillStyle = theme.sub;
-        roundRect(ctx, ribbonX, ribbonY, ribbonW, ribbonH, 14);
+        roundRect(ctx, ribbonX, ribbonY, ribbonW, ribbonH, 12);
         ctx.fill();
 
-        medalR = 74;
-        medalY = y + 56;
+        medalR = 62;
+        medalY = y + 46;
 
-        grad = ctx.createRadialGradient(centerX - 18, medalY - 18, 10, centerX, medalY, medalR);
+        grad = ctx.createRadialGradient(centerX - 16, medalY - 16, 10, centerX, medalY, medalR);
         grad.addColorStop(0, "#ffffff");
         grad.addColorStop(0.45, theme.light);
         grad.addColorStop(1, theme.main);
@@ -454,21 +454,21 @@
         ctx.arc(centerX, medalY, medalR, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.lineWidth = 6;
+        ctx.lineWidth = 5;
         ctx.strokeStyle = theme.dark;
         ctx.stroke();
 
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.font = "bold 70px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        ctx.fillText(rankText, centerX, medalY + 2);
+        ctx.font = "bold 56px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.fillText(rankText, centerX, medalY + 1);
 
-        return y + 150;
+        return y + 126;
     }
 
     function chooseBodyLayout(ctx, answerText, textWidth) {
-        var fontSizes = [72, 68, 64, 60, 56, 52, 48, 44, 40];
+        var fontSizes = [54, 50, 46, 42, 38, 34, 30];
         var i;
         var fontSize;
         var lineHeight;
@@ -478,9 +478,9 @@
             fontSize = fontSizes[i];
             ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
             lines = wrapByWidth(ctx, answerText, textWidth);
-            lineHeight = Math.floor(fontSize * 1.45);
+            lineHeight = Math.floor(fontSize * 1.6);
 
-            if (lines.length <= 18) {
+            if (lines.length <= 22) {
                 return {
                     fontSize: fontSize,
                     lineHeight: lineHeight,
@@ -489,27 +489,27 @@
             }
         }
 
-        fontSize = 36;
+        fontSize = 28;
         ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
         lines = wrapByWidth(ctx, answerText, textWidth);
 
         return {
             fontSize: fontSize,
-            lineHeight: Math.floor(fontSize * 1.45),
+            lineHeight: Math.floor(fontSize * 1.6),
             lines: lines
         };
     }
 
     function calcTextCardHeight(lineCount, lineHeight) {
-        var paddingTop = 60;
-        var paddingBottom = 100;
-        var minHeight = 760;
+        var paddingTop = 54;
+        var paddingBottom = 84;
+        var minHeight = 620;
         var textHeight = lineCount * lineHeight;
         return Math.max(minHeight, paddingTop + textHeight + paddingBottom);
     }
 
     function drawTextCard(ctx, x, y, w, answerText) {
-        var innerPaddingX = 70;
+        var innerPaddingX = 48;
         var textWidth = w - innerPaddingX * 2;
         var layout = chooseBodyLayout(ctx, answerText, textWidth);
         var fontSize = layout.fontSize;
@@ -520,12 +520,12 @@
         var i;
 
         ctx.fillStyle = "#f8f8f8";
-        roundRect(ctx, x, y, w, h, 34);
+        roundRect(ctx, x, y, w, h, 30);
         ctx.fill();
 
         ctx.strokeStyle = "#e5d8bd";
         ctx.lineWidth = 2;
-        roundRect(ctx, x, y, w, h, 34);
+        roundRect(ctx, x, y, w, h, 30);
         ctx.stroke();
 
         ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
@@ -533,7 +533,7 @@
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
 
-        textStartY = y + 60 + lineHeight / 2;
+        textStartY = y + 54 + lineHeight / 2;
 
         for (i = 0; i < lines.length; i++) {
             ctx.fillText(lines[i], x + w / 2, textStartY);
@@ -543,8 +543,8 @@
         ctx.fillStyle = "#8a6510";
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
-        ctx.font = "bold 28px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        ctx.fillText("合法的留年チワワ", x + w / 2, y + h - 54);
+        ctx.font = "bold 24px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.fillText("合法的留年チワワ", x + w / 2, y + h - 46);
 
         return h;
     }
@@ -552,12 +552,12 @@
     function buildImageData(questionTitle, answerText, badges) {
         var canvas = document.createElement("canvas");
         var ctx = canvas.getContext("2d");
-        var outerX = 60;
-        var outerY = 72;
-        var outerW = 924;
-        var innerX = 110;
-        var innerY = 120;
-        var innerW = 824;
+        var outerX = 54;
+        var outerY = 60;
+        var outerW = 612;
+        var innerX = 86;
+        var innerY = 94;
+        var innerW = 548;
         var centerX;
         var titleLines;
         var y;
@@ -567,19 +567,21 @@
         var textCardX;
         var textCardY;
         var textCardW;
+        var layout;
         var textCardH;
         var innerBottomY;
         var outerH;
 
-        canvas.width = 1080;
-        canvas.height = 1800;
+        canvas.width = 720;
+        canvas.height = 1400;
 
         centerX = innerX + innerW / 2;
 
-        ctx.font = "bold 54px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        titleLines = wrapByWidth(ctx, questionTitle, innerW - 120);
+        ctx.font = "bold 34px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        titleLines = wrapByWidth(ctx, questionTitle, innerW - 70);
 
-        y = innerY + 56 + Math.min(titleLines.length, 2) * 68;
+        y = innerY + 34;
+        y += Math.min(titleLines.length, 3) * 48;
 
         rankBadge = "";
         for (i = 0; i < badges.length; i++) {
@@ -591,30 +593,28 @@
         }
 
         if (rankBadge !== "") {
-            y += 8;
-            y += 150;
+            y += 4;
+            y += 126;
         }
 
         if (otherBadges.length > 0) {
-            y += 6;
-            y += 74;
+            y += 4;
+            y += 68;
         }
 
-        y += 18;
+        y += 14;
 
-        textCardX = innerX + 40;
+        textCardX = innerX + 20;
         textCardY = y;
-        textCardW = innerW - 80;
+        textCardW = innerW - 40;
 
-        ctx.font = "bold 72px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        textCardH = calcTextCardHeight(
-            chooseBodyLayout(ctx, answerText, textCardW - 140).lines.length,
-            chooseBodyLayout(ctx, answerText, textCardW - 140).lineHeight
-        );
+        ctx.font = "bold 54px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        layout = chooseBodyLayout(ctx, answerText, textCardW - 96);
+        textCardH = calcTextCardHeight(layout.lines.length, layout.lineHeight);
 
-        innerBottomY = textCardY + textCardH + 70;
-        outerH = (innerBottomY - outerY) + 60;
-        canvas.height = Math.max(1450, outerY + outerH + 72);
+        innerBottomY = textCardY + textCardH + 54;
+        outerH = (innerBottomY - outerY) + 42;
+        canvas.height = Math.max(1100, outerY + outerH + 60);
 
         ctx = canvas.getContext("2d");
 
@@ -622,32 +622,32 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = "rgba(0,0,0,0.08)";
-        roundRect(ctx, outerX + 18, outerY + 18, outerW, outerH, 46);
+        roundRect(ctx, outerX + 12, outerY + 12, outerW, outerH, 34);
         ctx.fill();
 
         ctx.fillStyle = "#fff8eb";
-        roundRect(ctx, outerX, outerY, outerW, outerH, 46);
+        roundRect(ctx, outerX, outerY, outerW, outerH, 34);
         ctx.fill();
 
         ctx.fillStyle = "rgba(0,0,0,0.05)";
-        roundRect(ctx, innerX + 10, innerY + 10, innerW, innerBottomY - innerY, 40);
+        roundRect(ctx, innerX + 8, innerY + 8, innerW, innerBottomY - innerY, 28);
         ctx.fill();
 
         ctx.fillStyle = "#f7f1e3";
-        roundRect(ctx, innerX, innerY, innerW, innerBottomY - innerY, 40);
+        roundRect(ctx, innerX, innerY, innerW, innerBottomY - innerY, 28);
         ctx.fill();
 
         ctx.fillStyle = "#111111";
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
-        ctx.font = "bold 54px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 34px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
 
-        titleLines = wrapByWidth(ctx, questionTitle, innerW - 120);
-        y = innerY + 56;
+        titleLines = wrapByWidth(ctx, questionTitle, innerW - 70);
+        y = innerY + 34;
 
-        for (i = 0; i < titleLines.length && i < 2; i++) {
+        for (i = 0; i < titleLines.length && i < 3; i++) {
             ctx.fillText(titleLines[i], centerX, y);
-            y += 68;
+            y += 48;
         }
 
         rankBadge = "";
@@ -662,20 +662,20 @@
         }
 
         if (rankBadge !== "") {
-            y += 8;
+            y += 4;
             y = drawLargeRank(ctx, rankBadge, centerX, y);
         }
 
         if (otherBadges.length > 0) {
-            y += 6;
+            y += 4;
             y = drawCenteredBadges(ctx, otherBadges, centerX, y);
         }
 
-        y += 18;
+        y += 14;
 
-        textCardX = innerX + 40;
+        textCardX = innerX + 20;
         textCardY = y;
-        textCardW = innerW - 80;
+        textCardW = innerW - 40;
 
         drawTextCard(ctx, textCardX, textCardY, textCardW, answerText);
 
