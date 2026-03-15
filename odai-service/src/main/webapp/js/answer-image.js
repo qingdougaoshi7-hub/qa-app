@@ -13,12 +13,12 @@
             "border:none;" +
             "background:#fff;" +
             "color:#222;" +
-            "padding:6px 12px;" +
+            "padding:8px 14px;" +
             "border-radius:999px;" +
             "cursor:pointer;" +
             "font-weight:bold;" +
-            "font-size:12px;" +
-            "line-height:1.1;" +
+            "font-size:14px;" +
+            "line-height:1.2;" +
             "box-shadow:0 2px 8px rgba(0,0,0,0.10);" +
             "transition:transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;" +
             "}" +
@@ -53,7 +53,7 @@
             "}" +
             ".ai-modal-panel{" +
             "width:92vw;" +
-            "max-width:520px;" +
+            "max-width:620px;" +
             "max-height:90vh;" +
             "overflow:auto;" +
             "background:#fff8eb;" +
@@ -64,7 +64,7 @@
             ".ai-modal-title{" +
             "margin:0 0 14px;" +
             "text-align:center;" +
-            "font-size:18px;" +
+            "font-size:20px;" +
             "font-weight:bold;" +
             "}" +
             ".ai-modal-preview-wrap{" +
@@ -92,7 +92,7 @@
             "border-radius:999px;" +
             "cursor:pointer;" +
             "font-weight:bold;" +
-            "font-size:13px;" +
+            "font-size:14px;" +
             "}" +
             ".ai-modal-button.sub{" +
             "background:#fff;" +
@@ -467,13 +467,56 @@
         return y + 150;
     }
 
-    function drawTextCard(ctx, x, y, w, h, answerText) {
-        var fontSize = 64;
-        var lineHeight = 92;
-        var lines = [];
-        var visibleLines;
-        var blockHeight;
-        var lineY;
+    function chooseBodyLayout(ctx, answerText, textWidth) {
+        var fontSizes = [72, 68, 64, 60, 56, 52, 48, 44, 40];
+        var i;
+        var fontSize;
+        var lineHeight;
+        var lines;
+
+        for (i = 0; i < fontSizes.length; i++) {
+            fontSize = fontSizes[i];
+            ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+            lines = wrapByWidth(ctx, answerText, textWidth);
+            lineHeight = Math.floor(fontSize * 1.45);
+
+            if (lines.length <= 18) {
+                return {
+                    fontSize: fontSize,
+                    lineHeight: lineHeight,
+                    lines: lines
+                };
+            }
+        }
+
+        fontSize = 36;
+        ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        lines = wrapByWidth(ctx, answerText, textWidth);
+
+        return {
+            fontSize: fontSize,
+            lineHeight: Math.floor(fontSize * 1.45),
+            lines: lines
+        };
+    }
+
+    function calcTextCardHeight(lineCount, lineHeight) {
+        var paddingTop = 60;
+        var paddingBottom = 100;
+        var minHeight = 760;
+        var textHeight = lineCount * lineHeight;
+        return Math.max(minHeight, paddingTop + textHeight + paddingBottom);
+    }
+
+    function drawTextCard(ctx, x, y, w, answerText) {
+        var innerPaddingX = 70;
+        var textWidth = w - innerPaddingX * 2;
+        var layout = chooseBodyLayout(ctx, answerText, textWidth);
+        var fontSize = layout.fontSize;
+        var lineHeight = layout.lineHeight;
+        var lines = layout.lines;
+        var h = calcTextCardHeight(lines.length, lineHeight);
+        var textStartY;
         var i;
 
         ctx.fillStyle = "#f8f8f8";
@@ -485,30 +528,25 @@
         roundRect(ctx, x, y, w, h, 34);
         ctx.stroke();
 
-        do {
-            ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-            lines = wrapByWidth(ctx, answerText, w - 140);
-            lineHeight = Math.floor(fontSize * 1.45);
-
-            if (lines.length <= 6 || fontSize <= 40) {
-                break;
-            }
-
-            fontSize -= 4;
-        } while (true);
-
-        visibleLines = lines.slice(0, 8);
-        blockHeight = visibleLines.length * lineHeight;
-        lineY = y + (h / 2) - (blockHeight / 2) + (lineHeight / 2);
-
+        ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
         ctx.fillStyle = "#2a2a2a";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
 
-        for (i = 0; i < visibleLines.length; i++) {
-            ctx.fillText(visibleLines[i], x + w / 2, lineY);
-            lineY += lineHeight;
+        textStartY = y + 60 + lineHeight / 2;
+
+        for (i = 0; i < lines.length; i++) {
+            ctx.fillText(lines[i], x + w / 2, textStartY);
+            textStartY += lineHeight;
         }
+
+        ctx.fillStyle = "#8a6510";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.font = "bold 28px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.fillText("合法的留年チワワ", x + w / 2, y + h - 54);
+
+        return h;
     }
 
     function buildImageData(questionTitle, answerText, badges) {
@@ -517,11 +555,9 @@
         var outerX = 60;
         var outerY = 72;
         var outerW = 924;
-        var outerH = 1166;
         var innerX = 110;
         var innerY = 120;
         var innerW = 824;
-        var innerH = 1060;
         var centerX;
         var titleLines;
         var y;
@@ -532,9 +568,55 @@
         var textCardY;
         var textCardW;
         var textCardH;
+        var innerBottomY;
+        var outerH;
 
         canvas.width = 1080;
-        canvas.height = 1350;
+        canvas.height = 1800;
+
+        centerX = innerX + innerW / 2;
+
+        ctx.font = "bold 54px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        titleLines = wrapByWidth(ctx, questionTitle, innerW - 120);
+
+        y = innerY + 56 + Math.min(titleLines.length, 2) * 68;
+
+        rankBadge = "";
+        for (i = 0; i < badges.length; i++) {
+            if (isRankText(badges[i])) {
+                rankBadge = badges[i];
+            } else {
+                otherBadges.push(badges[i]);
+            }
+        }
+
+        if (rankBadge !== "") {
+            y += 8;
+            y += 150;
+        }
+
+        if (otherBadges.length > 0) {
+            y += 6;
+            y += 74;
+        }
+
+        y += 18;
+
+        textCardX = innerX + 40;
+        textCardY = y;
+        textCardW = innerW - 80;
+
+        ctx.font = "bold 72px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        textCardH = calcTextCardHeight(
+            chooseBodyLayout(ctx, answerText, textCardW - 140).lines.length,
+            chooseBodyLayout(ctx, answerText, textCardW - 140).lineHeight
+        );
+
+        innerBottomY = textCardY + textCardH + 70;
+        outerH = (innerBottomY - outerY) + 60;
+        canvas.height = Math.max(1450, outerY + outerH + 72);
+
+        ctx = canvas.getContext("2d");
 
         ctx.fillStyle = "#c89d3a";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -548,14 +630,12 @@
         ctx.fill();
 
         ctx.fillStyle = "rgba(0,0,0,0.05)";
-        roundRect(ctx, innerX + 10, innerY + 10, innerW, innerH, 40);
+        roundRect(ctx, innerX + 10, innerY + 10, innerW, innerBottomY - innerY, 40);
         ctx.fill();
 
         ctx.fillStyle = "#f7f1e3";
-        roundRect(ctx, innerX, innerY, innerW, innerH, 40);
+        roundRect(ctx, innerX, innerY, innerW, innerBottomY - innerY, 40);
         ctx.fill();
-
-        centerX = innerX + innerW / 2;
 
         ctx.fillStyle = "#111111";
         ctx.textAlign = "center";
@@ -571,6 +651,8 @@
         }
 
         rankBadge = "";
+        otherBadges = [];
+
         for (i = 0; i < badges.length; i++) {
             if (isRankText(badges[i])) {
                 rankBadge = badges[i];
@@ -594,15 +676,8 @@
         textCardX = innerX + 40;
         textCardY = y;
         textCardW = innerW - 80;
-        textCardH = 640;
 
-        drawTextCard(ctx, textCardX, textCardY, textCardW, textCardH, answerText);
-
-        ctx.fillStyle = "#8a6510";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
-        ctx.font = "bold 24px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        ctx.fillText("合法的留年チワワ", centerX, textCardY + textCardH - 46);
+        drawTextCard(ctx, textCardX, textCardY, textCardW, answerText);
 
         return canvas.toDataURL("image/png");
     }
