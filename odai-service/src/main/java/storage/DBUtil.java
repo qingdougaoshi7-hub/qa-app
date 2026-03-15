@@ -6,30 +6,37 @@ import java.sql.SQLException;
 
 public class DBUtil {
 
-    private static final String USER =
-            System.getenv().getOrDefault("JDBC_USER", "sa");
-
-    private static final String PASSWORD =
-            System.getenv().getOrDefault("JDBC_PASSWORD", "");
-
     static {
         try {
-            Class.forName("org.h2.Driver");
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("H2ドライバの読み込みに失敗しました", e);
+            throw new RuntimeException("PostgreSQLドライバの読み込みに失敗しました", e);
         }
     }
 
     private static String getJdbcUrl() {
-        String envUrl = System.getenv("JDBC_URL");
-        if (envUrl != null && !envUrl.isBlank()) {
-            return envUrl;
+        String databaseUrl = System.getenv("DATABASE_URL");
+
+        if (databaseUrl == null || databaseUrl.isBlank()) {
+            throw new RuntimeException("環境変数 DATABASE_URL が設定されていません。");
         }
 
-        return "jdbc:h2:file:/tmp/odai_service_db3;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE";
+        if (databaseUrl.startsWith("jdbc:postgresql://")) {
+            return databaseUrl;
+        }
+
+        if (databaseUrl.startsWith("postgresql://")) {
+            return "jdbc:" + databaseUrl;
+        }
+
+        if (databaseUrl.startsWith("postgres://")) {
+            return "jdbc:postgresql://" + databaseUrl.substring("postgres://".length());
+        }
+
+        throw new RuntimeException("DATABASE_URL の形式が不正です: " + databaseUrl);
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(getJdbcUrl(), USER, PASSWORD);
+        return DriverManager.getConnection(getJdbcUrl());
     }
 }

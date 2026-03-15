@@ -11,7 +11,7 @@ public class DBInit {
 
             st.execute("""
                 CREATE TABLE IF NOT EXISTS users (
-                    user_id INT AUTO_INCREMENT PRIMARY KEY,
+                    user_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                     username VARCHAR(100) NOT NULL UNIQUE,
                     password_hash VARCHAR(255) NOT NULL,
                     discord_webhook_url VARCHAR(1000),
@@ -32,9 +32,9 @@ public class DBInit {
 
             st.execute("""
                 CREATE TABLE IF NOT EXISTS answers (
-                    answer_id INT AUTO_INCREMENT PRIMARY KEY,
+                    answer_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                     question_id VARCHAR(20) NOT NULL,
-                    text CLOB NOT NULL,
+                    text TEXT NOT NULL,
                     favorite BOOLEAN DEFAULT FALSE,
                     read_flag BOOLEAN DEFAULT FALSE,
                     special_type VARCHAR(30) DEFAULT '',
