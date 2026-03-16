@@ -371,13 +371,13 @@
         var height;
         var width;
 
-        ctx.font = "bold 24px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        paddingX = 20;
-        height = 50;
+        ctx.font = "bold 20px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        paddingX = 18;
+        height = 44;
         width = Math.ceil(ctx.measureText(text).width) + paddingX * 2;
 
         ctx.fillStyle = badgeColor(text);
-        roundRect(ctx, x, y, width, height, 25);
+        roundRect(ctx, x, y, width, height, 22);
         ctx.fill();
 
         ctx.fillStyle = "#ffffff";
@@ -398,22 +398,22 @@
             return y;
         }
 
-        ctx.font = "bold 24px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 20px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
 
         for (i = 0; i < badges.length; i++) {
-            widths.push(Math.ceil(ctx.measureText(badges[i]).width) + 40);
+            widths.push(Math.ceil(ctx.measureText(badges[i]).width) + 36);
             totalWidth += widths[i];
         }
 
-        totalWidth += (badges.length - 1) * 12;
+        totalWidth += (badges.length - 1) * 10;
         x = centerX - totalWidth / 2;
 
         for (i = 0; i < badges.length; i++) {
             drawBadge(ctx, badges[i], x, y);
-            x += widths[i] + 12;
+            x += widths[i] + 10;
         }
 
-        return y + 68;
+        return y + 58;
     }
 
     function drawLargeRank(ctx, rankText, centerX, y) {
@@ -432,19 +432,19 @@
 
         theme = rankTheme(rankText);
 
-        ribbonW = 300;
-        ribbonH = 24;
+        ribbonW = 250;
+        ribbonH = 20;
         ribbonX = centerX - ribbonW / 2;
-        ribbonY = y + 34;
+        ribbonY = y + 28;
 
         ctx.fillStyle = theme.sub;
-        roundRect(ctx, ribbonX, ribbonY, ribbonW, ribbonH, 12);
+        roundRect(ctx, ribbonX, ribbonY, ribbonW, ribbonH, 10);
         ctx.fill();
 
-        medalR = 62;
-        medalY = y + 46;
+        medalR = 52;
+        medalY = y + 38;
 
-        grad = ctx.createRadialGradient(centerX - 16, medalY - 16, 10, centerX, medalY, medalR);
+        grad = ctx.createRadialGradient(centerX - 14, medalY - 14, 8, centerX, medalY, medalR);
         grad.addColorStop(0, "#ffffff");
         grad.addColorStop(0.45, theme.light);
         grad.addColorStop(1, theme.main);
@@ -454,21 +454,21 @@
         ctx.arc(centerX, medalY, medalR, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 4;
         ctx.strokeStyle = theme.dark;
         ctx.stroke();
 
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.font = "bold 56px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 46px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
         ctx.fillText(rankText, centerX, medalY + 1);
 
-        return y + 126;
+        return y + 104;
     }
 
     function chooseBodyLayout(ctx, answerText, textWidth) {
-        var fontSizes = [54, 50, 46, 42, 38, 34, 30];
+        var fontSizes = [42, 38, 34, 30, 28, 26, 24];
         var i;
         var fontSize;
         var lineHeight;
@@ -478,9 +478,9 @@
             fontSize = fontSizes[i];
             ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
             lines = wrapByWidth(ctx, answerText, textWidth);
-            lineHeight = Math.floor(fontSize * 1.6);
+            lineHeight = Math.floor(fontSize * 1.55);
 
-            if (lines.length <= 22) {
+            if (lines.length <= 24) {
                 return {
                     fontSize: fontSize,
                     lineHeight: lineHeight,
@@ -489,27 +489,27 @@
             }
         }
 
-        fontSize = 28;
+        fontSize = 22;
         ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
         lines = wrapByWidth(ctx, answerText, textWidth);
 
         return {
             fontSize: fontSize,
-            lineHeight: Math.floor(fontSize * 1.6),
+            lineHeight: Math.floor(fontSize * 1.55),
             lines: lines
         };
     }
 
     function calcTextCardHeight(lineCount, lineHeight) {
-        var paddingTop = 54;
-        var paddingBottom = 84;
-        var minHeight = 620;
+        var paddingTop = 48;
+        var paddingBottom = 76;
+        var minHeight = 520;
         var textHeight = lineCount * lineHeight;
         return Math.max(minHeight, paddingTop + textHeight + paddingBottom);
     }
 
     function drawTextCard(ctx, x, y, w, answerText) {
-        var innerPaddingX = 48;
+        var innerPaddingX = 42;
         var textWidth = w - innerPaddingX * 2;
         var layout = chooseBodyLayout(ctx, answerText, textWidth);
         var fontSize = layout.fontSize;
@@ -520,12 +520,12 @@
         var i;
 
         ctx.fillStyle = "#f8f8f8";
-        roundRect(ctx, x, y, w, h, 30);
+        roundRect(ctx, x, y, w, h, 28);
         ctx.fill();
 
         ctx.strokeStyle = "#e5d8bd";
         ctx.lineWidth = 2;
-        roundRect(ctx, x, y, w, h, 30);
+        roundRect(ctx, x, y, w, h, 28);
         ctx.stroke();
 
         ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
@@ -533,7 +533,7 @@
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
 
-        textStartY = y + 54 + lineHeight / 2;
+        textStartY = y + 48 + lineHeight / 2;
 
         for (i = 0; i < lines.length; i++) {
             ctx.fillText(lines[i], x + w / 2, textStartY);
@@ -543,10 +543,8 @@
         ctx.fillStyle = "#8a6510";
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
-        ctx.font = "bold 24px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        ctx.fillText("合法的留年チワワ", x + w / 2, y + h - 46);
-
-        return h;
+        ctx.font = "bold 22px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.fillText("合法的留年チワワ", x + w / 2, y + h - 42);
     }
 
     function buildImageData(questionTitle, answerText, badges) {
@@ -577,11 +575,11 @@
 
         centerX = innerX + innerW / 2;
 
-        ctx.font = "bold 34px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 30px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
         titleLines = wrapByWidth(ctx, questionTitle, innerW - 70);
 
-        y = innerY + 34;
-        y += Math.min(titleLines.length, 3) * 48;
+        y = innerY + 30;
+        y += Math.min(titleLines.length, 3) * 42;
 
         rankBadge = "";
         for (i = 0; i < badges.length; i++) {
@@ -594,27 +592,27 @@
 
         if (rankBadge !== "") {
             y += 4;
-            y += 126;
+            y += 104;
         }
 
         if (otherBadges.length > 0) {
             y += 4;
-            y += 68;
+            y += 58;
         }
 
-        y += 14;
+        y += 12;
 
-        textCardX = innerX + 20;
+        textCardX = innerX + 18;
         textCardY = y;
-        textCardW = innerW - 40;
+        textCardW = innerW - 36;
 
-        ctx.font = "bold 54px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        layout = chooseBodyLayout(ctx, answerText, textCardW - 96);
+        ctx.font = "bold 42px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        layout = chooseBodyLayout(ctx, answerText, textCardW - 84);
         textCardH = calcTextCardHeight(layout.lines.length, layout.lineHeight);
 
-        innerBottomY = textCardY + textCardH + 54;
-        outerH = (innerBottomY - outerY) + 42;
-        canvas.height = Math.max(1100, outerY + outerH + 60);
+        innerBottomY = textCardY + textCardH + 46;
+        outerH = (innerBottomY - outerY) + 38;
+        canvas.height = Math.max(980, outerY + outerH + 54);
 
         ctx = canvas.getContext("2d");
 
@@ -640,14 +638,14 @@
         ctx.fillStyle = "#111111";
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
-        ctx.font = "bold 34px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 30px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
 
         titleLines = wrapByWidth(ctx, questionTitle, innerW - 70);
-        y = innerY + 34;
+        y = innerY + 30;
 
         for (i = 0; i < titleLines.length && i < 3; i++) {
             ctx.fillText(titleLines[i], centerX, y);
-            y += 48;
+            y += 42;
         }
 
         rankBadge = "";
@@ -671,11 +669,11 @@
             y = drawCenteredBadges(ctx, otherBadges, centerX, y);
         }
 
-        y += 14;
+        y += 12;
 
-        textCardX = innerX + 20;
+        textCardX = innerX + 18;
         textCardY = y;
-        textCardW = innerW - 40;
+        textCardW = innerW - 36;
 
         drawTextCard(ctx, textCardX, textCardY, textCardW, answerText);
 
