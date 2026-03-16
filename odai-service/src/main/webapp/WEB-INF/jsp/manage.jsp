@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page import="model.Question" %>
 <%@ page import="model.Answer" %>
 
@@ -197,26 +198,39 @@
                     <div class="answer-actions">
                         <button type="button"
                                 class="favorite-button <%= favorite ? "active" : "" %>"
-                                onclick="toggleFavorite(<%= a.getAnswerId() %>)">
+                                data-action="favorite"
+                                data-answer-id="<%= a.getAnswerId() %>">
                             <%= favorite ? "お気に入り解除" : "お気に入り" %>
                         </button>
 
                         <button type="button"
                                 class="icon-button"
-                                onclick="toggleMarkAction('<%= q.getId() %>', <%= a.getAnswerId() %>, 'special', <%= currentPage %>)">
+                                data-action="mark"
+                                data-question-id="<%= q.getId() %>"
+                                data-answer-id="<%= a.getAnswerId() %>"
+                                data-mark-type="special"
+                                data-page="<%= currentPage %>">
                             <%= special ? "特別枠を解除" : "特別枠にする" %>
                         </button>
 
                         <button type="button"
                                 class="icon-button"
-                                onclick="toggleMarkAction('<%= q.getId() %>', <%= a.getAnswerId() %>, 'chihuahua', <%= currentPage %>)">
+                                data-action="mark"
+                                data-question-id="<%= q.getId() %>"
+                                data-answer-id="<%= a.getAnswerId() %>"
+                                data-mark-type="chihuahua"
+                                data-page="<%= currentPage %>">
                             <%= chihuahua ? "チワワ賞を解除" : "チワワ賞にする" %>
                         </button>
 
                         <% if (isFavoritesMode) { %>
                             <button type="button"
                                     class="icon-button"
-                                    onclick="toggleMarkAction('<%= q.getId() %>', <%= a.getAnswerId() %>, 'final', <%= currentPage %>)">
+                                    data-action="mark"
+                                    data-question-id="<%= q.getId() %>"
+                                    data-answer-id="<%= a.getAnswerId() %>"
+                                    data-mark-type="final"
+                                    data-page="<%= currentPage %>">
                                 <%= finalFlag ? "決勝を解除" : "このページの決勝にする" %>
                             </button>
                         <% } %>
@@ -244,7 +258,7 @@
                 <div class="pagination">
                     <% for (int p = 1; p <= totalPages; p++) { %>
                         <a class="tab-button <%= p == currentPage ? "active" : "" %>"
-                           href="<%= request.getContextPath() %>/manage/<%= q.getId() %>?mode=<%= mode %>&keyword=<%= java.net.URLEncoder.encode(keyword, "UTF-8") %>&page=<%= p %>">
+                           href="<%= request.getContextPath() %>/manage/<%= q.getId() %>?mode=<%= mode %>&keyword=<%= URLEncoder.encode(keyword, "UTF-8") %>&page=<%= p %>">
                             <%= p %>
                         </a>
                     <% } %>
@@ -313,6 +327,25 @@ function toggleMarkAction(questionId, answerId, action, page) {
         alert("更新に失敗しました。");
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-action='favorite']").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            toggleFavorite(this.dataset.answerId);
+        });
+    });
+
+    document.querySelectorAll("[data-action='mark']").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            toggleMarkAction(
+                this.dataset.questionId,
+                this.dataset.answerId,
+                this.dataset.markType,
+                this.dataset.page
+            );
+        });
+    });
+});
 </script>
 
 <script src="<%= request.getContextPath() %>/js/answer-image.js"></script>
