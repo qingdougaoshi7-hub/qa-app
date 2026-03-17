@@ -13,12 +13,12 @@
             "border:none;" +
             "background:#fff;" +
             "color:#222;" +
-            "padding:10px 16px;" +
+            "padding:6px 12px;" +
             "border-radius:999px;" +
             "cursor:pointer;" +
             "font-weight:bold;" +
-            "font-size:15px;" +
-            "line-height:1.2;" +
+            "font-size:12px;" +
+            "line-height:1.1;" +
             "box-shadow:0 2px 8px rgba(0,0,0,0.10);" +
             "transition:transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;" +
             "}" +
@@ -32,8 +32,8 @@
             "}" +
             ".answer-image-action-row{" +
             "display:flex;" +
-            "justify-content:flex-end;" +
-            "margin-bottom:10px;" +
+            "justify-content:flex-start;" +
+            "margin-top:10px;" +
             "}" +
             ".ai-modal{" +
             "position:fixed;" +
@@ -46,25 +46,25 @@
             "align-items:center;" +
             "justify-content:center;" +
             "z-index:3000;" +
-            "padding:16px;" +
+            "padding:20px;" +
             "}" +
             ".ai-modal.open{" +
             "display:flex;" +
             "}" +
             ".ai-modal-panel{" +
-            "width:94vw;" +
-            "max-width:560px;" +
+            "width:92vw;" +
+            "max-width:520px;" +
             "max-height:90vh;" +
             "overflow:auto;" +
             "background:#fff8eb;" +
             "border-radius:24px;" +
-            "padding:16px;" +
+            "padding:18px;" +
             "box-shadow:0 18px 50px rgba(0,0,0,0.35);" +
             "}" +
             ".ai-modal-title{" +
             "margin:0 0 14px;" +
             "text-align:center;" +
-            "font-size:20px;" +
+            "font-size:18px;" +
             "font-weight:bold;" +
             "}" +
             ".ai-modal-preview-wrap{" +
@@ -92,7 +92,7 @@
             "border-radius:999px;" +
             "cursor:pointer;" +
             "font-weight:bold;" +
-            "font-size:14px;" +
+            "font-size:13px;" +
             "}" +
             ".ai-modal-button.sub{" +
             "background:#fff;" +
@@ -196,8 +196,7 @@
                     text: "回答画像を共有"
                 });
             })
-            .catch(function () {
-            });
+            .catch(function () {});
     }
 
     function trimText(text) {
@@ -343,41 +342,33 @@
     }
 
     function badgeColor(text) {
-        if (text.indexOf("お気に入り") !== -1) { return "#b8860b"; }
-        if (text.indexOf("特別枠") !== -1) { return "#8f3fb0"; }
-        if (text.indexOf("チワワ賞") !== -1) { return "#d97706"; }
-        if (text.indexOf("決勝") !== -1) { return "#0f766e"; }
+        if (text.indexOf("お気に入り") !== -1) return "#b8860b";
+        if (text.indexOf("特別枠") !== -1) return "#8f3fb0";
+        if (text.indexOf("チワワ賞") !== -1) return "#d97706";
+        if (text.indexOf("決勝") !== -1) return "#0f766e";
         return "#555555";
     }
 
     function rankTheme(rankText) {
         var rank = trimText(rankText);
 
-        if (rank === "1位") {
-            return { main: "#d4a017", sub: "#b88710", light: "#f8df83", dark: "#8b6508" };
-        }
-        if (rank === "2位") {
-            return { main: "#adb5bd", sub: "#8f989f", light: "#eceff2", dark: "#6d757c" };
-        }
-        if (rank === "3位") {
-            return { main: "#b86b3d", sub: "#9a562e", light: "#efc0a0", dark: "#6f391b" };
-        }
+        if (rank === "1位") return { main: "#d4a017", sub: "#b88710", light: "#f8df83", dark: "#8b6508" };
+        if (rank === "2位") return { main: "#adb5bd", sub: "#8f989f", light: "#eceff2", dark: "#6d757c" };
+        if (rank === "3位") return { main: "#b86b3d", sub: "#9a562e", light: "#efc0a0", dark: "#6f391b" };
 
         return { main: "#666666", sub: "#4d4d4d", light: "#bdbdbd", dark: "#333333" };
     }
 
     function drawBadge(ctx, text, x, y) {
-        var paddingX;
-        var height;
+        var paddingX = 14;
+        var height = 34;
         var width;
 
-        ctx.font = "bold 20px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        paddingX = 18;
-        height = 44;
+        ctx.font = "bold 16px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
         width = Math.ceil(ctx.measureText(text).width) + paddingX * 2;
 
         ctx.fillStyle = badgeColor(text);
-        roundRect(ctx, x, y, width, height, 22);
+        roundRect(ctx, x, y, width, height, 17);
         ctx.fill();
 
         ctx.fillStyle = "#ffffff";
@@ -398,22 +389,22 @@
             return y;
         }
 
-        ctx.font = "bold 20px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 16px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
 
         for (i = 0; i < badges.length; i++) {
-            widths.push(Math.ceil(ctx.measureText(badges[i]).width) + 36);
+            widths.push(Math.ceil(ctx.measureText(badges[i]).width) + 28);
             totalWidth += widths[i];
         }
 
-        totalWidth += (badges.length - 1) * 10;
+        totalWidth += (badges.length - 1) * 8;
         x = centerX - totalWidth / 2;
 
         for (i = 0; i < badges.length; i++) {
             drawBadge(ctx, badges[i], x, y);
-            x += widths[i] + 10;
+            x += widths[i] + 8;
         }
 
-        return y + 58;
+        return y + 44;
     }
 
     function drawLargeRank(ctx, rankText, centerX, y) {
@@ -432,19 +423,19 @@
 
         theme = rankTheme(rankText);
 
-        ribbonW = 250;
-        ribbonH = 20;
+        ribbonW = 180;
+        ribbonH = 14;
         ribbonX = centerX - ribbonW / 2;
-        ribbonY = y + 28;
+        ribbonY = y + 18;
 
         ctx.fillStyle = theme.sub;
-        roundRect(ctx, ribbonX, ribbonY, ribbonW, ribbonH, 10);
+        roundRect(ctx, ribbonX, ribbonY, ribbonW, ribbonH, 7);
         ctx.fill();
 
-        medalR = 52;
-        medalY = y + 38;
+        medalR = 38;
+        medalY = y + 24;
 
-        grad = ctx.createRadialGradient(centerX - 14, medalY - 14, 8, centerX, medalY, medalR);
+        grad = ctx.createRadialGradient(centerX - 8, medalY - 8, 6, centerX, medalY, medalR);
         grad.addColorStop(0, "#ffffff");
         grad.addColorStop(0.45, theme.light);
         grad.addColorStop(1, theme.main);
@@ -454,21 +445,21 @@
         ctx.arc(centerX, medalY, medalR, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 3;
         ctx.strokeStyle = theme.dark;
         ctx.stroke();
 
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.font = "bold 46px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 30px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
         ctx.fillText(rankText, centerX, medalY + 1);
 
-        return y + 104;
+        return y + 70;
     }
 
     function chooseBodyLayout(ctx, answerText, textWidth) {
-        var fontSizes = [42, 38, 34, 30, 28, 26, 24];
+        var fontSizes = [28, 26, 24, 22, 20, 18];
         var i;
         var fontSize;
         var lineHeight;
@@ -480,7 +471,7 @@
             lines = wrapByWidth(ctx, answerText, textWidth);
             lineHeight = Math.floor(fontSize * 1.55);
 
-            if (lines.length <= 24) {
+            if (lines.length <= 28) {
                 return {
                     fontSize: fontSize,
                     lineHeight: lineHeight,
@@ -489,7 +480,7 @@
             }
         }
 
-        fontSize = 22;
+        fontSize = 17;
         ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
         lines = wrapByWidth(ctx, answerText, textWidth);
 
@@ -501,15 +492,15 @@
     }
 
     function calcTextCardHeight(lineCount, lineHeight) {
-        var paddingTop = 48;
-        var paddingBottom = 76;
-        var minHeight = 520;
+        var paddingTop = 34;
+        var paddingBottom = 52;
+        var minHeight = 300;
         var textHeight = lineCount * lineHeight;
         return Math.max(minHeight, paddingTop + textHeight + paddingBottom);
     }
 
     function drawTextCard(ctx, x, y, w, answerText) {
-        var innerPaddingX = 42;
+        var innerPaddingX = 28;
         var textWidth = w - innerPaddingX * 2;
         var layout = chooseBodyLayout(ctx, answerText, textWidth);
         var fontSize = layout.fontSize;
@@ -520,12 +511,12 @@
         var i;
 
         ctx.fillStyle = "#f8f8f8";
-        roundRect(ctx, x, y, w, h, 28);
+        roundRect(ctx, x, y, w, h, 22);
         ctx.fill();
 
         ctx.strokeStyle = "#e5d8bd";
         ctx.lineWidth = 2;
-        roundRect(ctx, x, y, w, h, 28);
+        roundRect(ctx, x, y, w, h, 22);
         ctx.stroke();
 
         ctx.font = "bold " + fontSize + "px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
@@ -533,7 +524,7 @@
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
 
-        textStartY = y + 48 + lineHeight / 2;
+        textStartY = y + 34 + lineHeight / 2;
 
         for (i = 0; i < lines.length; i++) {
             ctx.fillText(lines[i], x + w / 2, textStartY);
@@ -543,19 +534,21 @@
         ctx.fillStyle = "#8a6510";
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
-        ctx.font = "bold 22px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        ctx.fillText("合法的留年チワワ", x + w / 2, y + h - 42);
+        ctx.font = "bold 16px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.fillText("合法的留年チワワ", x + w / 2, y + h - 28);
+
+        return h;
     }
 
     function buildImageData(questionTitle, answerText, badges) {
         var canvas = document.createElement("canvas");
         var ctx = canvas.getContext("2d");
-        var outerX = 54;
-        var outerY = 60;
-        var outerW = 612;
-        var innerX = 86;
-        var innerY = 94;
-        var innerW = 548;
+        var outerX = 40;
+        var outerY = 44;
+        var outerW = 640;
+        var innerX = 64;
+        var innerY = 66;
+        var innerW = 592;
         var centerX;
         var titleLines;
         var y;
@@ -571,15 +564,15 @@
         var outerH;
 
         canvas.width = 720;
-        canvas.height = 1400;
+        canvas.height = 1100;
 
         centerX = innerX + innerW / 2;
 
-        ctx.font = "bold 30px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        titleLines = wrapByWidth(ctx, questionTitle, innerW - 70);
+        ctx.font = "bold 22px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        titleLines = wrapByWidth(ctx, questionTitle, innerW - 40);
 
-        y = innerY + 30;
-        y += Math.min(titleLines.length, 3) * 42;
+        y = innerY + 24;
+        y += Math.min(titleLines.length, 2) * 30;
 
         rankBadge = "";
         for (i = 0; i < badges.length; i++) {
@@ -591,61 +584,53 @@
         }
 
         if (rankBadge !== "") {
-            y += 4;
-            y += 104;
+            y += 2;
+            y += 70;
         }
 
         if (otherBadges.length > 0) {
-            y += 4;
-            y += 58;
+            y += 2;
+            y += 44;
         }
 
-        y += 12;
+        y += 8;
 
-        textCardX = innerX + 18;
+        textCardX = innerX + 14;
         textCardY = y;
-        textCardW = innerW - 36;
+        textCardW = innerW - 28;
 
-        ctx.font = "bold 42px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
-        layout = chooseBodyLayout(ctx, answerText, textCardW - 84);
+        ctx.font = "bold 28px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        layout = chooseBodyLayout(ctx, answerText, textCardW - 56);
         textCardH = calcTextCardHeight(layout.lines.length, layout.lineHeight);
 
-        innerBottomY = textCardY + textCardH + 46;
-        outerH = (innerBottomY - outerY) + 38;
-        canvas.height = Math.max(980, outerY + outerH + 54);
+        innerBottomY = textCardY + textCardH + 28;
+        outerH = (innerBottomY - outerY) + 24;
+        canvas.height = Math.max(760, outerY + outerH + 40);
 
         ctx = canvas.getContext("2d");
 
         ctx.fillStyle = "#c89d3a";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = "rgba(0,0,0,0.08)";
-        roundRect(ctx, outerX + 12, outerY + 12, outerW, outerH, 34);
-        ctx.fill();
-
         ctx.fillStyle = "#fff8eb";
-        roundRect(ctx, outerX, outerY, outerW, outerH, 34);
-        ctx.fill();
-
-        ctx.fillStyle = "rgba(0,0,0,0.05)";
-        roundRect(ctx, innerX + 8, innerY + 8, innerW, innerBottomY - innerY, 28);
+        roundRect(ctx, outerX, outerY, outerW, outerH, 28);
         ctx.fill();
 
         ctx.fillStyle = "#f7f1e3";
-        roundRect(ctx, innerX, innerY, innerW, innerBottomY - innerY, 28);
+        roundRect(ctx, innerX, innerY, innerW, innerBottomY - innerY, 22);
         ctx.fill();
 
         ctx.fillStyle = "#111111";
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
-        ctx.font = "bold 30px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
+        ctx.font = "bold 22px 'Yu Gothic','Hiragino Sans','Meiryo',sans-serif";
 
-        titleLines = wrapByWidth(ctx, questionTitle, innerW - 70);
-        y = innerY + 30;
+        titleLines = wrapByWidth(ctx, questionTitle, innerW - 40);
+        y = innerY + 24;
 
-        for (i = 0; i < titleLines.length && i < 3; i++) {
+        for (i = 0; i < titleLines.length && i < 2; i++) {
             ctx.fillText(titleLines[i], centerX, y);
-            y += 42;
+            y += 30;
         }
 
         rankBadge = "";
@@ -660,20 +645,20 @@
         }
 
         if (rankBadge !== "") {
-            y += 4;
+            y += 2;
             y = drawLargeRank(ctx, rankBadge, centerX, y);
         }
 
         if (otherBadges.length > 0) {
-            y += 4;
+            y += 2;
             y = drawCenteredBadges(ctx, otherBadges, centerX, y);
         }
 
-        y += 12;
+        y += 8;
 
-        textCardX = innerX + 18;
+        textCardX = innerX + 14;
         textCardY = y;
-        textCardW = innerW - 36;
+        textCardW = innerW - 28;
 
         drawTextCard(ctx, textCardX, textCardY, textCardW, answerText);
 
